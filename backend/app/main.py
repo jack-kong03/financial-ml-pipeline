@@ -1,16 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api import routes_stocks
 
 app = FastAPI(title="Financial ML Pipeline Backend")
 
-# Allow frontend (localhost:3000) to access the backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # or ["*"] for testing
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(routes_stocks.router)
 
 @app.get("/")
 def root():

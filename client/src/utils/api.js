@@ -8,3 +8,8 @@ export const fetchBackendMessage = async () => {
     return "Error connecting to backend.";
   }
 };
+
+export const fetchStockData = async () => {
+  const res = await fetch('http://127.0.0.1:8000/api/stocks');
+  return res.json();
+};
