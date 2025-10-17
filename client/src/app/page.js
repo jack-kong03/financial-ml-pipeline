@@ -1,34 +1,59 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { fetchMultipleStocks } from '@/utils/api';
+import { fetchMultipleStocks, fetchMultipleCryptos } from '@/utils/api';
+import { fetchLatestNews } from '@/utils/api';
 
 export default function Home() {
   const [stocks, setStocks] = useState([]);
+  const [cryptos, setCryptos] = useState([]);
+  const [news, setNews] = useState([]);
 
   useEffect(() => {
     fetchMultipleStocks(["AAPL", "GOOGL", "MSFT", "TSLA"]).then(setStocks);
+    fetchMultipleCryptos(["BTC-USD", "ETH-USD", "SOL-USD"]).then(setCryptos);
+    fetchLatestNews("finance").then(setNews);
   }, []);
 
-  if (!stocks.length) return <p>Loading...</p>;
+  if (!stocks.length && !cryptos.length && !news.length) return <p>Loading...</p>;
 
   return (
     <main>
-      <h1>Live Stock Dashboard</h1>
+      <h1>Live Market Dashboard</h1>
 
-      <div>
+      <section>
+        <h2>Stocks</h2>
         {stocks.map((s) => (
           <div key={s.symbol}>
-            <h2>{s.symbol}</h2>
-            <h3>{s.name}</h3>
-            <p>Sector: {s.sector}</p>
+            <h3>{s.symbol} - {s.name}</h3>
             <p>Price: ${s.price?.toFixed(2)}</p>
-            <p>
-              Change: {s.change}
-            </p>
+            <p>Change: {s.change}%</p>
             <p>Volume: {s.volume?.toLocaleString()}</p>
           </div>
         ))}
-      </div>
+      </section>
+
+      <section>
+        <h2>Cryptocurrencies</h2>
+        {cryptos.map((c) => (
+          <div key={c.symbol}>
+            <h3>{c.symbol} - {c.name}</h3>
+            <p>Price: ${c.price?.toFixed(2)}</p>
+            <p>Change: {c.change}%</p>
+            <p>Volume: {c.volume?.toLocaleString()}</p>
+          </div>
+        ))}
+      </section>
+
+      <section>
+        <h2>Latest News</h2>
+        {news.map((article, index) => (
+          <div key={index}>
+            <h3>{article.title}</h3>
+            <p>{article.description}</p>
+            <a href={article.url} target="_blank" rel="noopener noreferrer">Read more</a>
+          </div>
+        ))}
+      </section>
     </main>
   );
 }
