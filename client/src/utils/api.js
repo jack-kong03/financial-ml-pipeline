@@ -9,7 +9,8 @@ export const fetchBackendMessage = async () => {
   }
 };
 
-export const fetchStockData = async () => {
-  const res = await fetch('http://127.0.0.1:8000/api/stocks');
+export const fetchMultipleStocks = async (symbols = ["AAPL","GOOGL","MSFT"]) => {
+  const query = symbols.join(",");
+  const res = await fetch(`http://127.0.0.1:8000/api/stocks/?symbols=${query}`);
   return res.json();
 };

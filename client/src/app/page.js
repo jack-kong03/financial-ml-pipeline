@@ -1,23 +1,34 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { fetchStockData } from '@/utils/api';
+import { fetchMultipleStocks } from '@/utils/api';
 
 export default function Home() {
-  const [stock, setStock] = useState(null);
+  const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
-    fetchStockData().then(setStock);
+    fetchMultipleStocks(["AAPL", "GOOGL", "MSFT", "TSLA"]).then(setStocks);
   }, []);
 
-  if (!stock) return <p>Loading...</p>;
+  if (!stocks.length) return <p>Loading...</p>;
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen text-xl">
-      <h1 className="text-3xl font-bold mb-4">Stock Data</h1>
-      <p>Symbol: {stock.symbol}</p>
-      <p>Price: ${stock.price}</p>
-      <p>Change: {stock.change}</p>
-      <p>Volume: {stock.volume.toLocaleString()}</p>
+    <main>
+      <h1>Live Stock Dashboard</h1>
+
+      <div>
+        {stocks.map((s) => (
+          <div key={s.symbol}>
+            <h2>{s.symbol}</h2>
+            <h3>{s.name}</h3>
+            <p>Sector: {s.sector}</p>
+            <p>Price: ${s.price?.toFixed(2)}</p>
+            <p>
+              Change: {s.change}
+            </p>
+            <p>Volume: {s.volume?.toLocaleString()}</p>
+          </div>
+        ))}
+      </div>
     </main>
   );
 }
