@@ -4,7 +4,7 @@ import yfinance as yf
 router = APIRouter(prefix="/api/crypto", tags=["Crypto"])
 
 @router.get("/")
-def get_multiple_crypto(symbols: str = Query("BTC-USD,ETH-USD,SOL-USD")):
+def get_multiple_crypto(symbols: str = Query("BTC-USD,ETH-USD,SOL-USD,XRP-USD")):
     """
     Fetch multiple cryptocurrencies using Yahoo Finance.
     Uses fallback to .history() for current price when .info is incomplete.

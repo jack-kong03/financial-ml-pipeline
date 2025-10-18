@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { fetchMultipleStocks, fetchMultipleCryptos } from '@/utils/api';
+import { fetchMultipleStocks, fetchMultipleCryptos,  } from '@/utils/api';
 import { fetchLatestNews } from '@/utils/api';
 
 export default function Home() {
@@ -9,9 +9,12 @@ export default function Home() {
   const [news, setNews] = useState([]);
 
   useEffect(() => {
-    fetchMultipleStocks(["AAPL", "GOOGL", "MSFT", "TSLA"]).then(setStocks);
-    fetchMultipleCryptos(["BTC-USD", "ETH-USD", "SOL-USD"]).then(setCryptos);
-    fetchLatestNews("finance").then(setNews);
+    const stockSymbols = ["AAPL", "GOOGL", "MSFT", "NVDA", "AMZN", "TSLA", "META", "GC=F", "^GSPC", "^NDX"];
+    const cryptoSymbols = ["BTC-USD", "ETH-USD", "SOL-USD", "XRP-USD"];
+    fetchMultipleStocks(stockSymbols).then(setStocks);
+    fetchMultipleCryptos(cryptoSymbols).then(setCryptos);
+    const allSymbols = [...stockSymbols, ...cryptoSymbols].join(',');
+    fetchLatestNews(allSymbols).then(setNews);
   }, []);
 
   if (!stocks.length && !cryptos.length && !news.length) return <p>Loading...</p>;
