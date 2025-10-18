@@ -51,7 +51,7 @@ export default function Home() {
         <h2>Latest News</h2>
         {news.map((article, index) => (
           <div key={index}>
-            <h3>{article.title}</h3>
+            <h3>{article.title} (Sentiment: {article.sentiment})</h3>
             <p>{article.description}</p>
             <a href={article.url} target="_blank" rel="noopener noreferrer">Read more</a>
           </div>
