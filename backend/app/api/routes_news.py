@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 import requests
 import os
-from app.ml.sentiment import get_sentiment_score
+from app.ml.sentiment import get_sentiment_label
 
 router = APIRouter(prefix="/api/news", tags=["News"])
 
@@ -44,14 +44,13 @@ def get_financial_news(symbols: str = Query(",".join(symbol_map.keys()))):
     results = []
     for article in articles:
         text = f"{article.get('title','')} {article.get('description','')}"
-        sentiment = get_sentiment_score(text)  # call the separate utility
+        sentiment_label = get_sentiment_label(text)
         results.append({
             "title": article.get("title"),
             "description": article.get("description"),
             "url": article.get("url"),
             "source": article.get("source", {}).get("name"),
             "publishedAt": article.get("publishedAt"),
-            "sentiment": sentiment
+            "sentiment": sentiment_label   # now returns 'Positive', 'Neutral', or 'Negative'
         })
-
     return results
